@@ -2,10 +2,10 @@
 .DS_Store
 ._.DS_Store
 
-# Doxygen folders
-html
-latex
-docs/._refman.pdf
+# bin directory
+
+bin/*
+!bin/README.md
 
 # Compiled Object files
 *.slo
