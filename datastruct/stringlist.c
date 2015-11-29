@@ -87,7 +87,7 @@ void stringlist_insert(StringList list, const size_t index, const char * str)
 
     char * duped = malloc(strlen(str) + 1);
     if ( !duped ) {
-        fprintf(stderr, "Error: couldn't duplicate string list: "
+        fprintf(stderr, "Error: couldn't duplicate string: "
                 "%s, line %d\n    %s (%d)\n",
                 __FILE__, __LINE__, strerror(errno), errno);
         exit(EXIT_FAILURE);
@@ -109,20 +109,17 @@ void stringlist_insert(StringList list, const size_t index, const char * str)
 
 void stringlist_delete_first(StringList list)
 {
-    char * str = stringlist_remove_first(list);
-    free(str);
+    free(stringlist_remove_first(list));
 }
 
 void stringlist_delete_last(StringList list)
 {
-    char * str = stringlist_remove_last(list);
-    free(str);
+    free(stringlist_remove_last(list));
 }
 
 void stringlist_delete_index(StringList list, const size_t index)
 {
-    char * str = stringlist_remove_index(list, index);
-    free(str);
+    free(stringlist_remove_index(list, index));
 }
 
 char * stringlist_remove_first(StringList list)
