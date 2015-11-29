@@ -127,6 +127,17 @@ static void test_stringlist_removing(void)
     PGTEST_STREQUAL("string three", str);
     free(str);
 
+    str = stringlist_remove_first(list);
+    PGTEST_EQUAL(1, stringlist_length(list));
+    PGTEST_STREQUAL("string four", stringlist_get_first(list));
+    PGTEST_STREQUAL("string two", str);
+    free(str);
+
+    str = stringlist_remove_first(list);
+    PGTEST_EQUAL(0, stringlist_length(list));
+    PGTEST_STREQUAL("string four", str);
+    free(str);
+
     stringlist_destroy(list);
 }
 
