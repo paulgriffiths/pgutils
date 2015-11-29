@@ -61,6 +61,30 @@ void pg_test_strcmp(const enum pg_test_type type,
     }
 }
 
+void pg_test_llequal(const enum pg_test_type type,
+                     const long long n1, const long long n2, const char * fnc,
+                     const char * file, const int line)
+{
+    if ( n1 == n2 ) {
+        if ( type == PGTEST_TEST ) {
+            pg_test_add_passed_test();
+        }
+    }
+    else {
+        fprintf(stderr, "%s failed: %s() (%s, line %d)\n"
+                "    %lld != %lld\n",
+                pg_test_type_name(type), fnc, file, line, n1, n2);
+
+        if ( type == PGTEST_TEST ) {
+            pg_test_add_failed_test();
+        }
+        else if ( type == PGTEST_ASSERTION ) {
+            fflush(stderr);
+            abort();
+        }
+    }
+}
+
 void tests_show_summary(void)
 {
     if ( num_tests > 0 ) {

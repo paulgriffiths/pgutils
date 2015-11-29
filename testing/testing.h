@@ -12,15 +12,20 @@ enum pg_test_type {
         __func__, __FILE__, __LINE__)
 #define PGTEST_STREQUAL(s1, s2) pg_test_strcmp(PGTEST_TEST, \
         (s1), (s2), __func__, __FILE__, __LINE__)
+#define PGTEST_EQUAL(n1, n2) pg_test_llequal(PGTEST_TEST, \
+        ((long long) n1), ((long long) n2), __func__, __FILE__, __LINE__)
 
 #ifndef NDEBUG
 #define PGASSERT(cond) pg_test_condition(PGTEST_ASSERTION, \
         (cond), (#cond), __func__, __FILE__, __LINE__)
 #define PGASSERT_STREQUAL(s1, s2) pg_test_strcmp(PGTEST_ASSERTION, \
         (s1), (s2), __func__, __FILE__, __LINE__)
+#define PGASSERT_EQUAL(n1, n2) pg_test_llequal(PGTEST_ASSERTION, \
+        ((long long) n1), ((long long) n2), __func__, __FILE__, __LINE__)
 #else
 #define PGASSERT(cond)
 #define PGASSERT_STREQUAL(s1, s2)
+#define PGASSERT_EQUAL(n1, n2)
 #endif
 
 #ifdef DEBUG
@@ -47,6 +52,9 @@ void pg_test_condition(const enum pg_test_type type, const bool cond,
 void pg_test_strcmp(const enum pg_test_type type,
                     const char * s1, const char * s2, const char * fnc,
                     const char * file, const int line);
+void pg_test_llequal(const enum pg_test_type type,
+                     const long long n1, const long long n2, const char * fnc,
+                     const char * file, const int line);
 void tests_show_summary(void);
 
 void pgutils_exit_strerror(const char * file, const int line,
