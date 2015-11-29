@@ -1,5 +1,5 @@
 TESTMODULES := test_strings test_stringlist test_stringpair test_kvlist
-TESTMODULES += test_stackint test_queueint
+TESTMODULES += test_stackint test_queueint test_std_wrappers
 STRINGS_DEP := strings/strings.h strings/strings.c
 STRINGS_SRC := strings/strings.c
 TESTING_DEP := testing/testing.h testing/testing.c
@@ -14,6 +14,9 @@ DATAS_SRC   += datastruct/stringpair.c
 DATAS_SRC   += datastruct/kvlist.c
 DATAS_SRC   += datastruct/stackint.c
 DATAS_SRC   += datastruct/queueint.c
+WRAPS_DEP	:= wrappers/std_wrappers.c wrappers/std_wrappers.h
+WRAPS_DEP	+= wrappers/unix_wrappers.c wrappers/unix_wrappers.h
+WRAPS_SRC	+= wrappers/std_wrappers.c wrappers/unix_wrappers.c
 CC			:= cc
 BINDIR		:= bin
 TESTDIR		:= tests
@@ -43,10 +46,15 @@ test_kvlist: $(TESTDIR)/test_kvlist.c $(DATAS_DEP) $(TESTING_DEP) \
 test_stackint: $(TESTDIR)/test_stackint.c $(DATAS_DEP) $(TESTING_DEP) \
 	$(STRINGS_DEP)
 	$(CC) -o $(BINDIR)/test_stackint $(TESTDIR)/test_stackint.c \
-		$(DATAS_SRC) $(STRINGS_SRC) $(TESTING_SRC) $(TEST_CFLAGS)
+		$(DATAS_SRC) $(TESTING_SRC) $(TEST_CFLAGS)
 
 test_queueint: $(TESTDIR)/test_queueint.c $(DATAS_DEP) $(TESTING_DEP) \
 	$(STRINGS_DEP)
 	$(CC) -o $(BINDIR)/test_queueint $(TESTDIR)/test_queueint.c \
-		$(DATAS_SRC) $(STRINGS_SRC) $(TESTING_SRC) $(TEST_CFLAGS)
+		$(DATAS_SRC) $(TESTING_SRC) $(TEST_CFLAGS)
+
+test_std_wrappers: $(TESTDIR)/test_std_wrappers.c $(WRAPS_DEP) $(TESTING_DEP) \
+	$(STRINGS_DEP)
+	$(CC) -o $(BINDIR)/test_std_wrappers $(TESTDIR)/test_std_wrappers.c \
+		$(WRAPS_SRC) $(TESTING_SRC) $(TEST_CFLAGS)
 
