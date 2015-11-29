@@ -10,6 +10,7 @@ static void test_trim_right(void);
 static void test_trim_left(void);
 static void test_trim(void);
 static void test_trim_trailing_newline(void);
+static void test_dup_string(void);
 
 int main(void)
 {
@@ -18,15 +19,16 @@ int main(void)
     return 0;
 }
 
-void test_strings(void)
+static void test_strings(void)
 {
     test_trim_right();
     test_trim_left();
     test_trim();
     test_trim_trailing_newline();
+    test_dup_string();
 }
 
-void test_trim_right(void)
+static void test_trim_right(void)
 {
     char buffer[100] = "a string \r\n\t  ";
 
@@ -42,7 +44,7 @@ void test_trim_right(void)
     PGTEST_STREQUAL(buffer, "");
 }
 
-void test_trim_left(void)
+static void test_trim_left(void)
 {
     char buffer[100] = " \r\n\t  a string";
 
@@ -58,7 +60,7 @@ void test_trim_left(void)
     PGTEST_STREQUAL(buffer, "");
 }
 
-void test_trim(void)
+static void test_trim(void)
 {
     char buffer[100] = " \r\n\t  a string \t\n\r   ";
 
@@ -74,7 +76,7 @@ void test_trim(void)
     PGTEST_STREQUAL(buffer, "");
 }
 
-void test_trim_trailing_newline(void)
+static void test_trim_trailing_newline(void)
 {
     char buffer[100] = "a string \n";
 
@@ -86,7 +88,7 @@ void test_trim_trailing_newline(void)
     PGTEST_STREQUAL(buffer, "a string ");
 }
 
-void test_dup_string(void)
+static void test_dup_string(void)
 {
     char * str = dup_string("this is a string");
     PGTEST_STREQUAL(str, "this is a string");
