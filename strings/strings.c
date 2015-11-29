@@ -1,11 +1,9 @@
-#define _POSIX_C_SOURCE 200809L
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include <ctype.h>
 #include "strings.h"
-
 
 char * trim_trailing_newline(char * str)
 {
@@ -15,7 +13,6 @@ char * trim_trailing_newline(char * str)
     }
     return str;
 }
-
 
 char * trim_right(char * str)
 {
@@ -29,7 +26,6 @@ char * trim_right(char * str)
 
     return str;
 }
-
 
 char * trim_left(char * str)
 {
@@ -50,10 +46,23 @@ char * trim_left(char * str)
     return str;
 }
 
-
 char * trim(char * str)
 {
     trim_left(str);
     trim_right(str);
     return str;
 }
+
+char * dup_string(char * str)
+{
+    char * new_string = malloc(strlen(str) + 1);
+    if ( !new_string ) {
+        fprintf(stderr, "Error: couldn't duplicate string: "
+                "%s, line %d\n    %s (%d)\n",
+                __FILE__, __LINE__, strerror(errno), errno);
+        exit(EXIT_FAILURE);
+    }
+    strcpy(new_string, str);
+    return new_string;
+}
+

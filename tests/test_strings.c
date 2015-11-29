@@ -1,5 +1,5 @@
-#define DEBUG
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 #include "strings/strings.h"
@@ -86,3 +86,9 @@ void test_trim_trailing_newline(void)
     PGTEST_STREQUAL(buffer, "a string ");
 }
 
+void test_dup_string(void)
+{
+    char * str = dup_string("this is a string");
+    PGTEST_STREQUAL(str, "this is a string");
+    free(str);
+}
