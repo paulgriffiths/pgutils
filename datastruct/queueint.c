@@ -26,7 +26,7 @@ QueueInt queueint_create(void)
 {
     struct queueint * new_queue = queueint_allocate();
     new_queue->capacity = INITIAL_QUEUE_SIZE;
-    new_queue->front = 0;
+    new_queue->front = 1;
     new_queue->back = 0;
     new_queue->size = 0;
     new_queue->data = queueint_data_allocate(new_queue->capacity);
@@ -76,12 +76,9 @@ void queueint_enqueue(QueueInt queue, const int n)
 {
     queueint_resize_if_full(queue);
 
-    if ( !queueint_is_empty(queue) ) {
-        queue->back = (queue->back + 1) % queue->capacity;
-    }
-
-    ++queue->size;
+    queue->back = (queue->back + 1) % queue->capacity;
     queue->data[queue->back] = n;
+    ++queue->size;
 }
 
 int queueint_dequeue(QueueInt queue)
@@ -89,15 +86,8 @@ int queueint_dequeue(QueueInt queue)
     queueint_error_if_empty(queue, "couldn't dequeue value");
 
     const int n = queue->data[queue->front];
+    queue->front = (queue->front + 1) % queue->capacity;
     --queue->size;
-
-    if ( !queueint_is_empty(queue) ) {
-        queue->front = (queue->front + 1) % queue->capacity;
-    }
-    else {
-        queue->front = 0;
-        queue->back = 0;
-    }
 
     return n;
 }
