@@ -10,6 +10,10 @@ enum pg_test_type {
 
 #define PGTEST(cond) pg_test_condition(PGTEST_TEST, (cond), (#cond), \
         __func__, __FILE__, __LINE__)
+#define PGTEST_TRUE(cond) pg_test_condition(PGTEST_TEST, (cond), (#cond), \
+        __func__, __FILE__, __LINE__)
+#define PGTEST_FALSE(cond) pg_test_condition(PGTEST_TEST, (!(cond)), \
+        ("!" #cond), __func__, __FILE__, __LINE__)
 #define PGTEST_STREQUAL(s1, s2) pg_test_strcmp(PGTEST_TEST, \
         (s1), (s2), __func__, __FILE__, __LINE__)
 #define PGTEST_EQUAL(n1, n2) pg_test_llequal(PGTEST_TEST, \
