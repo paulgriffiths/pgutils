@@ -11,7 +11,6 @@ void stringlist_destroy(StringList list);
 
 size_t stringlist_length(StringList list);
 bool stringlist_is_empty(StringList list);
-bool stringlist_is_index_in_range(StringList list, const size_t index);
 
 void stringlist_prepend(StringList list, const char * str);
 void stringlist_append(StringList list, const char * str);
