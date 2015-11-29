@@ -14,7 +14,7 @@ struct dictstring {
 
 static struct dictstring * dictstring_allocate(void);
 static KVList * dictstring_lists_allocate(const size_t capacity);
-static size_t djb2hash(const char * str);
+static size_t djb2hash(DictString dict, const char * str);
 
 DictString dictstring_create(void)
 {
@@ -35,32 +35,27 @@ void dictstring_destroy(DictString dict)
 
 void dictstring_insert(DictString dict, const char * key, const char * value)
 {
-    const size_t hash = djb2hash(key) % dict->num_buckets;
-    kvlist_insert(dict->lists[hash], key, value);
+    kvlist_insert(dict->lists[djb2hash(dict, key)], key, value);
 }
 
 char * dictstring_remove(DictString dict, const char * key)
 {
-    const size_t hash = djb2hash(key) % dict->num_buckets;
-    return kvlist_remove(dict->lists[hash], key);
+    return kvlist_remove(dict->lists[djb2hash(dict, key)], key);
 }
 
 bool dictstring_delete(DictString dict, const char * key)
 {
-    const size_t hash = djb2hash(key) % dict->num_buckets;
-    return kvlist_delete(dict->lists[hash], key);
+    return kvlist_delete(dict->lists[djb2hash(dict, key)], key);
 }
 
 bool dictstring_has_key(DictString dict, const char * key)
 {
-    const size_t hash = djb2hash(key) % dict->num_buckets;
-    return kvlist_has_key(dict->lists[hash], key);
+    return kvlist_has_key(dict->lists[djb2hash(dict, key)], key);
 }
 
 char * dictstring_value_for_key(DictString dict, const char * key)
 {
-    const size_t hash = djb2hash(key) % dict->num_buckets;
-    return kvlist_value_for_key(dict->lists[hash], key);
+    return kvlist_value_for_key(dict->lists[djb2hash(dict, key)], key);
 }
 
 static struct dictstring * dictstring_allocate(void)
@@ -84,6 +79,7 @@ static KVList * dictstring_lists_allocate(const size_t capacity)
                 __FILE__, __LINE__, strerror(errno), errno);
         exit(EXIT_FAILURE);
     }
+
     for ( size_t i = 0; i < capacity; ++i ) {
         new_lists[i] = kvlist_create();
     }
@@ -91,7 +87,7 @@ static KVList * dictstring_lists_allocate(const size_t capacity)
     return new_lists;
 }
 
-static size_t djb2hash(const char * str)
+static size_t djb2hash(DictString dict, const char * str)
 {
     size_t hash = 5381;
     int c;
@@ -100,5 +96,5 @@ static size_t djb2hash(const char * str)
         hash = ((hash << 5) + hash) + c;
     }
 
-    return hash;
+    return hash % dict->num_buckets;
 }
